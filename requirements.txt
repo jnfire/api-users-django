@@ -1,0 +1,15 @@
+# Django
+django===4.2.1
+django-extensions===3.2.1
+dj-database-url===2.0.0
+
+# Django REST
+djangorestframework===3.14.0
+django-cors-headers===4.0.0
+
+# Testing
+pytest-django===4.5.2
+pytest===7.3.1
+
+# Databases
+psycopg2-binary===2.9.6

@@ -1,15 +1,23 @@
 # api-users-django
 Basic user administration api developed in django
 
-## Start project
 ### Requirements
-First you need to create an .env file from the envExample document included in the project, don't forget to replace the indicated fields with 'your-variable'
+First copy the file .envExample to .env and set the environment variables.
 
-### Start with Docker
-For start project you need to run the following command:
+## Automatic start
+
+## Manual start
+### Start docker containers
 ```
 docker compose -f docker-compose.dev.yaml up
 ```
 
-#### Create superuser
+### Create superuser
+```
+docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage.py runscript make_superuser"
+```
 
+## Open django shell
+```
+docker compose -f docker-compose.dev.yaml exec django bash
+```

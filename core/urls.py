@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from apps.account.views import redirect_admin
+from apps.account.views import redirect_admin, Ping
 
 
 API_PATH = "api/v1"
@@ -28,4 +28,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # API REST
     path(f"{API_PATH}/account/", include("apps.account.urls")),
+    # Ping
+    path(f"{API_PATH}/ping/", Ping.as_view(), name="ping"),
 ]

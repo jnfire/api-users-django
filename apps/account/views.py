@@ -73,3 +73,22 @@ class Login(ObtainAuthToken):
             data=serializer.errors,
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class Logout(APIView):
+    """Logout user"""
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Get user
+        user = request.user
+        # Search old tokens
+        old_tokens = Token.objects.filter(user=user)
+        if old_tokens:
+            # Delete old tokens
+            old_tokens.delete()
+        return Response(
+            data={"response": "Logout success"},
+            status=status.HTTP_200_OK,
+        )

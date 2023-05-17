@@ -36,7 +36,7 @@ def test_logout(client):
 
     # Then
     assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
-    assert "response" in content and content.get("response") == "Logout success", f"Error not found in response: {content}"
+    assert "response" in content and content.get("response") == "Cierre de sesión completado", f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -54,7 +54,6 @@ def test_logout_error_not_send_token(client):
         ))
     # Get content
     content = response.json()
-    token = content.get("token")
 
     # Then
     assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"

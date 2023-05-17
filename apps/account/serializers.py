@@ -2,12 +2,19 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from apps.account.models import Profile
 
+class UserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["email", "password", "first_name", "last_name"]
+
+
 class UserLoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
         fields = ["email", "password"]
+
 
 class ProfileGetSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField("get_email")

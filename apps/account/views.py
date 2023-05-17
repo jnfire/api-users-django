@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from apps.account.models import Profile
 
 # Serializers
-from apps.account.serializers import UserLoginSerializer, ProfileGetSerializer, ProfileUpdateSerializer
+from apps.account.serializers import UserCreateSerializer, UserLoginSerializer, ProfileGetSerializer, ProfileUpdateSerializer
 
 # Files
 from django.core.files.base import ContentFile
@@ -33,6 +33,42 @@ class Ping(APIView):
     """Check service ping"""
     def get(self, request):
         return Response({"response": "pong!"})
+
+
+class UserCreate(APIView):
+    """Register user"""
+
+    def post(self, request, *args, **kwargs):
+        # Get data from request
+        serializer = UserCreateSerializer(data=request.data)
+        # Validate data
+        if serializer.is_valid():
+            # Get serializer data
+            email = serializer.validated_data["email"]
+            password = serializer.validated_data["password"]
+            # Check if user exists
+            user = User.objects.filter(email=email).first()
+            if not user:
+                # Create user
+                user = User.objects.create_user(
+                    email=email,
+                    username=email,
+                    password=password,
+                )
+                # Create profile
+                Profile.objects.create(user=user)
+                return Response(
+                    data={"response": "Usuario creado correctamente"},
+                    status=status.HTTP_201_CREATED,
+                )
+            return Response(
+                data={"response": "El usuario ya existe"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class Login(ObtainAuthToken):
@@ -65,15 +101,15 @@ class Login(ObtainAuthToken):
                             status=status.HTTP_200_OK,
                         )
                     return Response(
-                        data={"response": "Password not valid"},
+                        data={"response": "Contraseña no valida"},
                         status=status.HTTP_401_UNAUTHORIZED,
                     )
                 return Response(
-                    data={"response": "Is not active"},
+                    data={"response": "Usuario no activo"},
                     status=status.HTTP_403_FORBIDDEN,
                 )
             return Response(
-                data={"response": "Email not valid or does not exist"},
+                data={"response": "El email no es valido o no existe"},
                 status=status.HTTP_404_NOT_FOUND,
             )
         return Response(
@@ -96,7 +132,7 @@ class Logout(APIView):
             # Delete old tokens
             old_tokens.delete()
         return Response(
-            data={"response": "Logout success"},
+            data={"response": "Cierre de sesión completado"},
             status=status.HTTP_200_OK,
         )
 
@@ -184,3 +220,4 @@ class ProfileView(APIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

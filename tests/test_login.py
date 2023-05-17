@@ -43,7 +43,7 @@ def test_login_wrong_password(client):
 
     # Then
     assert response.status_code == 401, f"Response status code: {response.status_code} and content: {content}"
-    assert "response" in content and content.get("response") == "Password not valid", f"Error not found in response: {content}"
+    assert "response" in content and content.get("response") == "Contraseña no valida", f"Error not found in response: {content}"
 
 @pytest.mark.django_db
 def test_login_wrong_email(client):
@@ -64,7 +64,7 @@ def test_login_wrong_email(client):
 
     # Then
     assert response.status_code == 404, f"Response status code: {response.status_code} and content: {content}"
-    assert "response" in content and content.get("response") == "Email not valid or does not exist", f"Error not found in response: {content}"
+    assert "response" in content and content.get("response") == "El email no es valido o no existe", f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -88,7 +88,7 @@ def test_login_inactive_user(client):
 
     # Then
     assert response.status_code == 403, f"Response status code: {response.status_code} and content: {content}"
-    assert "response" in content and content.get("response") == "Is not active", f"Error not found in response: {content}"
+    assert "response" in content and content.get("response") == "Usuario no activo", f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db

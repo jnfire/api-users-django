@@ -21,3 +21,8 @@ docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage
 ```
 docker compose -f docker-compose.dev.yaml exec django bash
 ```
+
+## Run tests
+```
+docker compose -f docker-compose.dev.yaml exec django bash -c "pytest"
+```

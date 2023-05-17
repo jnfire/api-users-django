@@ -15,13 +15,17 @@ from django.contrib.auth.models import User
 from apps.account.models import Profile
 
 # Serializers
-from apps.account.serializers import UserCreateSerializer, UserLoginSerializer, ProfileGetSerializer, ProfileUpdateSerializer
+from apps.account.serializers import (
+    UserCreateSerializer,
+    UserLoginSerializer,
+    ProfileGetSerializer,
+    ProfileUpdateSerializer,
+)
 
 # Files
 from django.core.files.base import ContentFile
 import base64
 import time
-
 
 
 def redirect_admin(request):
@@ -31,6 +35,7 @@ def redirect_admin(request):
 
 class Ping(APIView):
     """Check service ping"""
+
     def get(self, request):
         return Response({"response": "pong!"})
 
@@ -73,6 +78,7 @@ class UserCreate(APIView):
 
 class Login(ObtainAuthToken):
     """Login user"""
+
     def post(self, request, *args, **kwargs):
         # Default data
         # Get data from request
@@ -120,6 +126,7 @@ class Login(ObtainAuthToken):
 
 class Logout(APIView):
     """Logout user"""
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -139,6 +146,7 @@ class Logout(APIView):
 
 class ProfileView(APIView):
     """Get user profile"""
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -166,16 +174,15 @@ class ProfileView(APIView):
 
             # Update user
             user.email = get_value_without_none(
-                old_value=user.email,
-                new_value=serializer.validated_data.get("email")
+                old_value=user.email, new_value=serializer.validated_data.get("email")
             )
             user.first_name = get_value_without_none(
                 old_value=user.first_name,
-                new_value=serializer.validated_data.get("first_name")
+                new_value=serializer.validated_data.get("first_name"),
             )
             user.last_name = get_value_without_none(
                 old_value=user.last_name,
-                new_value=serializer.validated_data.get("last_name")
+                new_value=serializer.validated_data.get("last_name"),
             )
             user.save()
 
@@ -183,11 +190,7 @@ class ProfileView(APIView):
             # Get avatar
             avatar = serializer.validated_data.get("avatar")
             # Update avatar
-            if (
-                avatar
-                and avatar.get("name")
-                and avatar.get("base64")
-            ):
+            if avatar and avatar.get("name") and avatar.get("base64"):
                 try:
                     # Get profile
                     profile = Profile.objects.filter(user=user).first()
@@ -220,4 +223,3 @@ class ProfileView(APIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

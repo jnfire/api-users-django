@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from apps.account.models import Profile
 
+
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

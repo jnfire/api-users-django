@@ -5,7 +5,7 @@ from core.settings import DOMAIN_URL
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='avatar_images', blank=True)
+    avatar = models.ImageField(upload_to="avatar_images", blank=True)
 
     @property
     def name(self):

@@ -32,9 +32,7 @@ def create_profile(add_image=True):
     user.save()
 
     # Create profile
-    profile = Profile.objects.create(
-        user=user
-    )
+    profile = Profile.objects.create(user=user)
 
     if add_image:
         # Add image to profile

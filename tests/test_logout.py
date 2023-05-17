@@ -16,13 +16,16 @@ def test_logout(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
     token = content.get("token")
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -35,8 +38,13 @@ def test_logout(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
-    assert "response" in content and content.get("response") == "Cierre de sesión completado", f"Error not found in response: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "response" in content
+        and content.get("response") == "Cierre de sesión completado"
+    ), f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -51,12 +59,15 @@ def test_logout_error_not_send_token(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -69,8 +80,14 @@ def test_logout_error_not_send_token(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 401, f"Response status code: {response.status_code} and content: {content}"
-    assert "detail" in content and content.get("detail") == "Las credenciales de autenticación no se proveyeron.", f"Error not found in response: {content}"
+    assert (
+        response.status_code == 401
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "detail" in content
+        and content.get("detail")
+        == "Las credenciales de autenticación no se proveyeron."
+    ), f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -85,13 +102,16 @@ def test_logout_error_wrong_token(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
     token = content.get("token")
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -104,5 +124,9 @@ def test_logout_error_wrong_token(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 401, f"Response status code: {response.status_code} and content: {content}"
-    assert "detail" in content and content.get("detail") == "Token inválido.", f"Error not found in response: {content}"
+    assert (
+        response.status_code == 401
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "detail" in content and content.get("detail") == "Token inválido."
+    ), f"Error not found in response: {content}"

@@ -43,13 +43,16 @@ def test_get_profile(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
     token = content.get("token")
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -62,11 +65,21 @@ def test_get_profile(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
-    assert "name" in content and content.get("name") == profile.name, f"Profile not found in response: {content}"
-    assert "email" in content and content.get("email") == profile.user.email, f"Profile not found in response: {content}"
-    assert "first_name" in content and content.get("first_name") == profile.user.first_name, f"Profile not found in response: {content}"
-    assert "last_name" in content and content.get("last_name") == profile.user.last_name, f"Profile not found in response: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "name" in content and content.get("name") == profile.name
+    ), f"Profile not found in response: {content}"
+    assert (
+        "email" in content and content.get("email") == profile.user.email
+    ), f"Profile not found in response: {content}"
+    assert (
+        "first_name" in content and content.get("first_name") == profile.user.first_name
+    ), f"Profile not found in response: {content}"
+    assert (
+        "last_name" in content and content.get("last_name") == profile.user.last_name
+    ), f"Profile not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -81,13 +94,16 @@ def test_get_profile_error_not_send_token(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
     token = content.get("token")
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -99,8 +115,14 @@ def test_get_profile_error_not_send_token(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 401, f"Response status code: {response.status_code} and content: {content}"
-    assert "detail" in content and content.get("detail") == "Las credenciales de autenticación no se proveyeron.", f"Error not found in response: {content}"
+    assert (
+        response.status_code == 401
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "detail" in content
+        and content.get("detail")
+        == "Las credenciales de autenticación no se proveyeron."
+    ), f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -115,13 +137,16 @@ def test_get_profile_error_invalid_token(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
     token = content.get("token")
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -134,8 +159,12 @@ def test_get_profile_error_invalid_token(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 401, f"Response status code: {response.status_code} and content: {content}"
-    assert "detail" in content and content.get("detail") == "Token inválido.", f"Error not found in response: {content}"
+    assert (
+        response.status_code == 401
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "detail" in content and content.get("detail") == "Token inválido."
+    ), f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -150,13 +179,16 @@ def test_update_profile(client):
         data=dict(
             email=profile.user.email,
             password="password",
-        ))
+        ),
+    )
     # Get content
     content = response.json()
     token = content.get("token")
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
     assert "token" in content, f"Token not found in response: {content}"
 
     # When
@@ -179,7 +211,9 @@ def test_update_profile(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
 
     # When
     # Get profile
@@ -191,12 +225,24 @@ def test_update_profile(client):
     content = response.json()
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
-    assert "name" in content and content.get("name") != profile.name, f"name not found in response: {content}"
-    assert "email" in content and content.get("email") != profile.user.email, f"email not found in response: {content}"
-    assert "first_name" in content and content.get("first_name") != profile.user.first_name, f"first_name not found in response: {content}"
-    assert "last_name" in content and content.get("last_name") != profile.user.last_name, f"last_name not found in response: {content}"
-    assert "avatar_url" in content and content.get("avatar_url") != profile.avatar_url, f"avatar_url not found in response: {content}"
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "name" in content and content.get("name") != profile.name
+    ), f"name not found in response: {content}"
+    assert (
+        "email" in content and content.get("email") != profile.user.email
+    ), f"email not found in response: {content}"
+    assert (
+        "first_name" in content and content.get("first_name") != profile.user.first_name
+    ), f"first_name not found in response: {content}"
+    assert (
+        "last_name" in content and content.get("last_name") != profile.user.last_name
+    ), f"last_name not found in response: {content}"
+    assert (
+        "avatar_url" in content and content.get("avatar_url") != profile.avatar_url
+    ), f"avatar_url not found in response: {content}"
 
     # Remove test images
     remove_test_images()

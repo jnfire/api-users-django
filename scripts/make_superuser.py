@@ -20,9 +20,7 @@ def run():
     )
 
     # Create profile
-    profile = Profile.objects.create(
-        user=user
-    )
+    profile = Profile.objects.create(user=user)
 
     # Add image to profile
     url_random_imagen = f"https://cdn.jsdelivr.net/gh/tanrax/place-image-random/images/{randint(1, 1000)}.jpg"

@@ -11,13 +11,15 @@ def test_create_user(client):
         data=dict(
             email="test@test.com",
             password="password",
-        )
+        ),
     )
     # Get content
     content = response.json()
 
     # Then
-    assert response.status_code == 201, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 201
+    ), f"Response status code: {response.status_code} and content: {content}"
 
 
 @pytest.mark.django_db
@@ -29,13 +31,15 @@ def test_create_user_error_email_already_exists(client):
         data=dict(
             email="test@test.com",
             password="password",
-        )
+        ),
     )
     # Get content
     content = response.json()
 
     # Then
-    assert response.status_code == 201, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 201
+    ), f"Response status code: {response.status_code} and content: {content}"
 
     # When
     response = client.post(
@@ -43,14 +47,18 @@ def test_create_user_error_email_already_exists(client):
         data=dict(
             email="test@test.com",
             password="password",
-        )
+        ),
     )
     # Get content
     content = response.json()
 
     # Then
-    assert response.status_code == 400, f"Response status code: {response.status_code} and content: {content}"
-    assert "response" in content and content.get("response") == "El usuario ya existe", f"Error not found in response: {content}"
+    assert (
+        response.status_code == 400
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "response" in content and content.get("response") == "El usuario ya existe"
+    ), f"Error not found in response: {content}"
 
 
 @pytest.mark.django_db
@@ -62,13 +70,15 @@ def test_create_and_login(client):
         data=dict(
             email="test@test.com",
             password="password",
-        )
+        ),
     )
     # Get content
     content = response.json()
 
     # Then
-    assert response.status_code == 201, f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        response.status_code == 201
+    ), f"Response status code: {response.status_code} and content: {content}"
 
     # When
     response = client.post(
@@ -76,12 +86,15 @@ def test_create_and_login(client):
         data=dict(
             email="test@test.com",
             password="password",
-        )
+        ),
     )
     # Get content
     content = response.json()
 
     # Then
-    assert response.status_code == 200, f"Response status code: {response.status_code} and content: {content}"
-    assert "token" in content and content.get("token") != "", f"Token not found in response: {content}"
-
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code} and content: {content}"
+    assert (
+        "token" in content and content.get("token") != ""
+    ), f"Token not found in response: {content}"

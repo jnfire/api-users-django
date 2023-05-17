@@ -5,16 +5,23 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 # Authentication
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
 # Models
 from django.contrib.auth.models import User
+from apps.account.models import Profile
 
 # Serializers
-from apps.account.serializers import UserLoginSerializer
+from apps.account.serializers import UserLoginSerializer, ProfileGetSerializer, ProfileUpdateSerializer
+
+# Files
+from django.core.files.base import ContentFile
+import base64
+import time
+
 
 
 def redirect_admin(request):
@@ -92,3 +99,88 @@ class Logout(APIView):
             data={"response": "Logout success"},
             status=status.HTTP_200_OK,
         )
+
+
+class ProfileView(APIView):
+    """Get user profile"""
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        """Get user profile"""
+        # Get user profile
+        profile = Profile.objects.filter(user=request.user).first()
+        # Serialize data
+        serializer = ProfileGetSerializer(profile)
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK,
+        )
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        serializer = ProfileUpdateSerializer(data=request.data)
+        if serializer.is_valid():
+
+            def get_value_without_none(old_value, new_value):
+                """Filter that returns the old_value if the new_value is None"""
+                if new_value and old_value != new_value:
+                    return new_value
+                return old_value
+
+            # Update user
+            user.email = get_value_without_none(
+                old_value=user.email,
+                new_value=serializer.validated_data.get("email")
+            )
+            user.first_name = get_value_without_none(
+                old_value=user.first_name,
+                new_value=serializer.validated_data.get("first_name")
+            )
+            user.last_name = get_value_without_none(
+                old_value=user.last_name,
+                new_value=serializer.validated_data.get("last_name")
+            )
+            user.save()
+
+            # Update profile
+            # Get avatar
+            avatar = serializer.validated_data.get("avatar")
+            # Update avatar
+            if (
+                avatar
+                and avatar.get("name")
+                and avatar.get("base64")
+            ):
+                try:
+                    # Get profile
+                    profile = Profile.objects.filter(user=user).first()
+                    # Get file
+                    file = avatar.get("base64")
+                    # Check file is base64
+                    if base64.b64encode(base64.b64decode(file)).decode("utf-8") == file:
+                        # Decode file
+                        new_file = ContentFile(
+                            base64.b64decode(file), avatar.get("name")
+                        )
+                        # Check file size is less than 5mb
+                        if new_file.size <= 5728640:
+                            # Upload file
+                            profile.avatar.save(
+                                f"{int(time.time() * 1000)}_{new_file.name}", new_file
+                            )
+                        else:
+                            return Response(
+                                dict(
+                                    response="El archivo es demasiado grande, debe ser menor o igual a 5mb"
+                                ),
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
+                except Exception:
+                    return Response(
+                        dict(response="El archivo no es base64"),
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

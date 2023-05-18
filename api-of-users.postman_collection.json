@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "a75d84f3-1992-4aeb-a8f1-1574595ba2dc",
+		"name": "api-of-users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14598692"
+	},
+	"item": [
+		{
+			"name": "Create account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}account/create/",
+					"host": [
+						"{{base_url}}account"
+					],
+					"path": [
+						"create",
+						""
+					]
+				},
+				"description": "Endpoint to create a user with the basic elements."
+			},
+			"response": []
+		},
+		{
+			"name": "Start session (token)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}account/login/",
+					"host": [
+						"{{base_url}}account"
+					],
+					"path": [
+						"login",
+						""
+					]
+				},
+				"description": "Endpoint to log in with an already created user account. We will receive an authentication token that must be included in the requests we make to protected endpoints such as get my user data, modify it and log out."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain my user data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": " Token {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}account/profile/",
+					"host": [
+						"{{base_url}}account"
+					],
+					"path": [
+						"profile",
+						""
+					]
+				},
+				"description": "Endpoint to obtain the profile data of the user who is logged in."
+			},
+			"response": []
+		},
+		{
+			"name": "Update my user data",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": " Token {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@test.com\",\n    \"first_name\": \"Nombre\",\n    \"last_name\": \"Apellido\",\n    \"avatar\": {\n        \"name\": \"\",\n        \"base64\": \"\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}account/profile/",
+					"host": [
+						"{{base_url}}account"
+					],
+					"path": [
+						"profile",
+						""
+					]
+				},
+				"description": "User data update endpoint."
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}ping/",
+					"host": [
+						"{{base_url}}ping"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "API performance test endpoint"
+			},
+			"response": []
+		},
+		{
+			"name": "Close session",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": " Token {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}account/logout/",
+					"host": [
+						"{{base_url}}account"
+					],
+					"path": [
+						"logout",
+						""
+					]
+				},
+				"description": "Logout endpoint, when used the token will be deleted and cannot be used again. To get another one we will need to log in again."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://api.localhost/api/v1/",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "a7266597f2ecbd0ef0af91d8f958b3dcc653a8be",
+			"type": "string"
+		}
+	]
+}

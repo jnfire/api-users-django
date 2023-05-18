@@ -20,4 +20,4 @@ class Profile(models.Model):
         verbose_name_plural = "Profiles"
 
     def __str__(self):
-        return self.user.enail
+        return self.user.email

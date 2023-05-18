@@ -14,9 +14,6 @@ from random import randint
 def create_profile(add_image=True):
     fake = Faker("es_ES")
 
-    # Delete all admin users
-    User.objects.filter(is_superuser=True).delete()
-
     # Email
     email = fake.unique.email()
 
@@ -29,6 +26,7 @@ def create_profile(add_image=True):
     )
     user.set_password("password")
     user.is_staff = False
+    user.is_superuser = False
     user.save()
 
     # Create profile
@@ -47,5 +45,9 @@ def create_profile(add_image=True):
 
 
 def run():
+    # Delete all admin users
+    User.objects.filter(is_superuser=False).delete()
+
+    # Create 10 users
     for _ in range(10):
         create_profile()

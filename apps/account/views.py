@@ -186,14 +186,15 @@ class ProfileView(APIView):
             )
             user.save()
 
+            # Get profile
+            profile = Profile.objects.filter(user=user).first()
+
             # Update profile
             # Get avatar
             avatar = serializer.validated_data.get("avatar")
             # Update avatar
             if avatar and avatar.get("name") and avatar.get("base64"):
                 try:
-                    # Get profile
-                    profile = Profile.objects.filter(user=user).first()
                     # Get file
                     file = avatar.get("base64")
                     # Check file is base64
@@ -220,6 +221,8 @@ class ProfileView(APIView):
                         dict(response="El archivo no es base64"),
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            # Set response serializer data
+            response_serializer = ProfileGetSerializer(profile)
+            # Return response
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,6 @@
 from django.urls import reverse
 import pytest
-from scripts.make_user import create_profile
+from scripts.make_users import create_profile
 
 
 @pytest.mark.django_db

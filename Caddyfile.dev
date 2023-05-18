@@ -1,13 +1,38 @@
 http://api.localhost {
-
     root * /usr/src/app/
 
     @notStatic {
-      not path /static/* /media/*
+        not path /static/* /media/*
     }
 
-    reverse_proxy @notStatic django:8000
+    reverse_proxy @notStatic django:8000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Port {server_port}
+        header_up X-Forwarded-Proto {scheme}
+    }
 
     file_server /static/*
     file_server /media/*
+
+    header {
+        Access-Control-Allow-Origin *
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Authorization, Content-Type"
+    }
+}
+
+http://web.localhost {
+    file_server
+
+    root * /usr/src/app/front/dist
+
+    encode zstd gzip
+
+    @static {
+            path_regexp \.(ico|css|js|gif|jpg|jpeg|png|svg|woff)$
+    }
+    header @static Cache-Control max-age=1
+    try_files {path} /index.html
 }

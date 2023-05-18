@@ -4,6 +4,8 @@ PROJECT_NAME=api-user
 DEBUG=True
 SECRET_KEY=your-secret-hash
 DOMAIN=api.localhost
+DOMAIN_URL=http://api.localhost
+DOMAIN_URL_FRONTEND=
 ALLOWED_HOSTS=api.localhost,localhost
 
 # Database

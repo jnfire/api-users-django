@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+from re import search
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,9 +26,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") == "True"
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",") + [os.environ.get("DOMAIN")]
+
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+
+if not DEBUG:
+    CORS_ALLOWED_ORIGINS = list(
+        filter(
+            lambda domain: domain != "",
+            list(
+                map(
+                    lambda url: "http://" + url
+                    if DEBUG and search("localhost", os.environ.get("DOMAIN_URL"))
+                    else "https://" + url,
+                    os.environ.get("ALLOWED_HOSTS", ".localhost,127.0.0.1,[::1]").split(
+                        ","
+                    ),
+                )
+            )
+            + [os.environ.get("DOMAIN_URL_FRONTEND", "http://localhost:3000")],
+            )
+    )
 
 
 # Application definition
@@ -41,12 +62,14 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "rest_framework.authtoken",
+    "corsheaders",
     "apps.account",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",

@@ -5,8 +5,8 @@ DEBUG=True
 SECRET_KEY=your-secret-hash
 DOMAIN=api.localhost
 DOMAIN_URL=http://api.localhost
-DOMAIN_URL_FRONTEND=
-ALLOWED_HOSTS=api.localhost,localhost
+DOMAIN_URL_FRONTEND=http://web.localhost
+ALLOWED_HOSTS=api.localhost,localhost,web.localhost
 
 # Database
 DB_NAME=users_db

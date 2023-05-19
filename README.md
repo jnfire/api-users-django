@@ -6,8 +6,15 @@ First copy the file .envExample to .env and set the environment variables.
 
 ## Automatic start
 Start with makefile if you have make installed on your system
+
+### Start docker containers
 ``` 
-make start
+make start.build
+```
+
+### Create fake data
+```
+make loaddata
 ```
 
 Note: See all options in the makefile with the command:

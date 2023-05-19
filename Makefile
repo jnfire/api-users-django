@@ -34,14 +34,16 @@ migrate: ## django makemigrations and migrate
 	# Migrate
 	docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage.py migrate"
 
-start: ## Start project and load fake data
+start.build: ## Start project
 	# Create .env file from .envExample
 	cp envExample .env
 	# Start project
-	docker compose -f docker-compose.dev.yaml up --build -d
-	# Run tests
-	make test
-	# Load data
-	make loaddata
-	# Open browser
+	docker compose -f docker-compose.dev.yaml up --build
+
+start: ## Start project
+	# Start project
+	docker compose -f docker-compose.dev.yaml up
+
+open: ## Open project to browser
+	# Open project
 	xdg-open http://api.localhost/

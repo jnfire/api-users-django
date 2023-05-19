@@ -35,6 +35,8 @@ migrate: ## django makemigrations and migrate
 	docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage.py migrate"
 
 start: ## Start project and load fake data
+	# Create .env file from .envExample
+	cp envExample .env
 	# Start project
 	docker compose -f docker-compose.dev.yaml up --build -d
 	# Run tests

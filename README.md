@@ -42,8 +42,10 @@ docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage
 ### Admin panel
 See on http://api.localhost/admin/
 
-### Fronteed page
+### Frontend page
 See on http://web.localhost/
+
+See the source code on [web-users-vue](https://github.com/jnfire/web-users-vue)
 
 ### Credentials
 ```

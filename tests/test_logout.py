@@ -30,7 +30,7 @@ def test_logout(client):
 
     # When
     # Logout
-    response = client.post(
+    response = client.get(
         reverse("logout"),
         HTTP_AUTHORIZATION=f" Token {token}",
     )
@@ -72,7 +72,7 @@ def test_logout_error_not_send_token(client):
 
     # When
     # Logout
-    response = client.post(
+    response = client.get(
         reverse("logout"),
         HTTP_AUTHORIZATION="",
     )
@@ -116,7 +116,7 @@ def test_logout_error_wrong_token(client):
 
     # When
     # Logout
-    response = client.post(
+    response = client.get(
         reverse("logout"),
         HTTP_AUTHORIZATION=f" Token {token}a",
     )

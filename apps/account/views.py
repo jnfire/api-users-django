@@ -130,7 +130,7 @@ class Logout(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         # Get user
         user = request.user
         # Search old tokens

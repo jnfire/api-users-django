@@ -22,8 +22,6 @@ Note: See all options in the makefile with the command:
 make
 ```
 
-See on http://api.localhost/
-
 ## Manual start
 ### Start docker containers
 ```
@@ -40,9 +38,12 @@ docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage
 docker compose -f docker-compose.dev.yaml exec -T django bash -c "python3 manage.py runscript make_users"
 ```
 
-
-## Open admin panel
+## See pages
+### Admin panel
 See on http://api.localhost/admin/
+
+### Fronteed page
+See on http://web.localhost/
 
 ### Credentials
 ```

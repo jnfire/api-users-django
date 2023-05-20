@@ -15,18 +15,12 @@ http://api.localhost {
 
     file_server /static/*
     file_server /media/*
-
-    header {
-        Access-Control-Allow-Origin *
-        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-        Access-Control-Allow-Headers "Authorization, Content-Type"
-    }
 }
 
 http://web.localhost {
     file_server
 
-    root * /usr/src/app/front/dist
+    root * /usr/src/app/front
 
     encode zstd gzip
 
